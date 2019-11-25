@@ -37,7 +37,7 @@ public:
 	
 	static LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-	HWND CreateBaseWindow(DWORD dwExStyle,HWND parent);
+	HWND CreateBaseWindow(HWND parent ,DWORD dwExStyle,int x=0 ,int y =0,int w=1,int h=1);
 
 	void SetGeometry(int x ,int y ,int w ,int h);
 

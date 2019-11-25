@@ -70,7 +70,7 @@ LRESULT CALLBACK StandardWindow::WindowProcedure(HWND hwnd, UINT message, WPARAM
 	return DefWindowProc(hwnd, message, wParam, lParam);
 }
 
-HWND StandardWindow::CreateBaseWindow(DWORD dwExStyle, HWND parent_hwnd)
+HWND StandardWindow::CreateBaseWindow(HWND parent, DWORD dwExStyle, int x , int y , int w, int h)
 {
 	WNDCLASSEX wincl;        /* Data structure for the window class */
 
@@ -98,11 +98,11 @@ HWND StandardWindow::CreateBaseWindow(DWORD dwExStyle, HWND parent_hwnd)
 		STTANDARD_CLASS_NAME,         /* class name */
 		STTANDARD_CLASS_NAME,       /* Title Text */
 		WS_POPUP, /* default window */
-		0,       /* Windows decides the position */
-		0,       /* where the window ends up on the screen */
-		1,                 /* The programs width */
-		1,                 /* and height in pixels */
-		parent_hwnd,        /* The window is a child-window to desktop */
+		x,       /* Windows decides the position */
+		y,       /* where the window ends up on the screen */
+		w,                 /* The programs width */
+		h,                 /* and height in pixels */
+		parent,        /* The window is a child-window to desktop */
 		NULL,                /* No menu */
 		GetModuleHandle(NULL),       /* Program Instance handler */
 		this                 /* No Window Creation data */
@@ -112,7 +112,7 @@ HWND StandardWindow::CreateBaseWindow(DWORD dwExStyle, HWND parent_hwnd)
 
 void StandardWindow::SetGeometry(int x, int y, int w, int h)
 {
-	MoveWindow(hwnd_, x, y, w, h, true);
+	MoveWindow(hwnd_, x, y, w, h, false);
 }
 
 void StandardWindow::Show()
