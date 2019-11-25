@@ -1,4 +1,3 @@
-//#include "stdafx.h"
 #include "StandardWindow.h"
 
 #define STTANDARD_CLASS_NAME _T("StandardWnd")
