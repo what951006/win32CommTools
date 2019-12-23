@@ -1,56 +1,51 @@
-// AdoRecordset.h: interface for the CAdoRecordset class.
-//
-//////////////////////////////////////////////////////////////////////
+ï»¿#pragma once
+#include <windows.h>
+#include <string>
+#import "C:\Program Files\Common Files\System\ado\msado15.dll" no_namespace rename( "EOF", "EndEOF" )
 
-#if !defined(AFX_ADORECORDSET_H__CC43A2BE_A414_47A0_93B3_FB963C38DABA__INCLUDED_)
-#define AFX_ADORECORDSET_H__CC43A2BE_A414_47A0_93B3_FB963C38DABA__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
-
+class CAdoDatabase;
 class CAdoRecordset  
 {
 public:
 	CAdoRecordset();
 	virtual ~CAdoRecordset();
-	//´ò¿ª±í
+	//æ‰“å¼€è¡¨
 	BOOL OpenTable(const std::string &strTable,CAdoDatabase* pDatabase);
-	//»ñÈ¡±íÖĞ×Ö¶Î(ÁĞ)µÄÊıÁ¿
+	//è·å–è¡¨ä¸­å­—æ®µ(åˆ—)çš„æ•°é‡
 	UINT GetFieldsCount();
-	//»ñÈ¡±íÖĞ×Ö¶ÎµÄÃû³Æ
+	//è·å–è¡¨ä¸­å­—æ®µçš„åç§°
 	std::string  GetFieldName(LONG nIndex);
-	//»ñÈ¡×Ö¶ÎµÄÖµ
+	//è·å–å­—æ®µçš„å€¼
 	BOOL GetValue(LONG nIndex, std::string  & strValue);
 	BOOL GetValue(const std::string & nIndex, std::string  & strValue);
 	BOOL GetValue(LONG nIndex,int & intValue);
 	BOOL GetValue(const std::string & nIndex,int & intValue);
-	//ÉèÖÃ×Ö¶ÎµÄÖµ
+	//è®¾ç½®å­—æ®µçš„å€¼
 	BOOL SetValue(LONG nIndex, const std::string & strValue);
 	BOOL SetValue(const char* nIndex, const std::string & strValue);
 	BOOL SetValue(LONG nIndex,int intValue);
 	BOOL SetValue(const char* nIndex,int intValue);
-	//ÓÎ±ê²Ù×÷
+	//æ¸¸æ ‡æ“ä½œ
 	void Move(LONG nIndex);
 	void MoveNext();
 	void MovePrevious();
 	void MoveFirst();
 	void MoveLast();
-	//ÅĞ¶ÏÊÇ·ñµ½×îºóÒ»Ìõ¼ÇÂ¼
+	//åˆ¤æ–­æ˜¯å¦åˆ°æœ€åä¸€æ¡è®°å½•
 	BOOL IsEOF();
-	//Ìí¼ÓĞÂĞĞ
+	//æ·»åŠ æ–°è¡Œ
 	void AddNew();
-	//¸üĞÂµ½Êı¾İ¿â
+	//æ›´æ–°åˆ°æ•°æ®åº“
 	void Update();
-	//É¾³ı¼ÇÂ¼
+	//åˆ é™¤è®°å½•
 	void Delete();
 	BOOL DeleteAll();
-	//Ö´ĞĞsqlÓï¾ä
+	//æ‰§è¡Œsqlè¯­å¥
 	BOOL OpenSql(const std::string & strSql,CAdoDatabase* pDatabse);
-//ÉèÖÃ¶ş½øÖÆÊı¾İ
+//è®¾ç½®äºŒè¿›åˆ¶æ•°æ®
 	BOOL SetBinaryValue(const char * nIndex,BYTE* pData,ULONG nLen);
 	BOOL SetBinaryValue(LONG nIndex,BYTE* pData,ULONG nLen);
-	//»ñÈ¡¶ş½øÖÆÊı¾İ
+	//è·å–äºŒè¿›åˆ¶æ•°æ®
 	BOOL GetBinaryValue(LONG nIndex,BYTE* pData,ULONG & nLen);
 	BOOL GetBinaryValue(const char * nIndex,BYTE* pData,ULONG & nLen);
 public:
@@ -61,5 +56,3 @@ public:
 	int GetMaxID();
 	_RecordsetPtr m_pRecordset;
 };
-
-#endif // !defined(AFX_ADORECORDSET_H__CC43A2BE_A414_47A0_93B3_FB963C38DABA__INCLUDED_)

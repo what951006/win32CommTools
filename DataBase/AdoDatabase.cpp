@@ -1,21 +1,7 @@
-// AdoDatabase.cpp: implementation of the CAdoDatabase class.
-//
-//////////////////////////////////////////////////////////////////////
-
-#include "stdafx.h"
-//#include "../DS0304.h" //µ±Ç°¹¤³ÌÍ·ÎÄ¼þ
-#include "AdoDatabase.h"
+ï»¿#include "AdoDatabase.h"
 #include <comutil.h>
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
 CAdoDatabase::CAdoDatabase()
 {
@@ -28,27 +14,26 @@ CAdoDatabase::~CAdoDatabase()
 }
 BOOL CAdoDatabase::OpenMDB(const std::string & strPath)
 {
-	////´´½¨Connection¶ÔÏó
-	//HRESULT nRet=m_pConn.CreateInstance(__uuidof(Connection));
- // if (FAILED(nRet))
- // {
-	//	return FALSE;
- // }
-	////¹¹ÔìÁ¬½Ó×Ö·û´®
- // CString strConn;
- // strConn.Format("Provider=Microsoft.Jet.OLEDB.4.0;"
-	//  "Data Source=%s;User ID=;Password=;", strPath);
-	////Á¬½ÓÊý¾Ý¿â
-	//nRet=m_pConn->Open(_bstr_t(strConn),"","",0);
-	//if (FAILED(nRet))
-	//{
- //     m_pConn.Release();
-	//		return FALSE;
-	//}
+	HRESULT nRet=m_pConn.CreateInstance(__uuidof(Connection));
+	if (FAILED(nRet))
+	{
+		return FALSE;
+	}
+	std::string strConn(1024, 0);
+	sprintf_s((char*)strConn.c_str(), strConn.size(), "Provider = Microsoft.Jet.OLEDB.4.0; "
+		"Data Source=%s;User ID=;Password=;", strPath.c_str());
+
+	nRet = m_pConn->Open(_bstr_t(strConn.c_str()), "", "", 0);
+	if (FAILED(nRet))
+	{
+		m_pConn.Release();
+		return FALSE;
+	}
 	return TRUE;
 }
 BOOL CAdoDatabase::OpenMSSQL(const std::string &  strConn)
 {
+	BOOL result = false;
 	HRESULT hr;	
 	try
 	{
@@ -56,22 +41,29 @@ BOOL CAdoDatabase::OpenMSSQL(const std::string &  strConn)
 		if(SUCCEEDED(hr))
 		{
 			m_pConn->ConnectionTimeout=3;
-			m_pConn->Open(_bstr_t(strConn.c_str()),"","",adModeUnknown);
+			hr =m_pConn->Open(_bstr_t(strConn.c_str()),"","",adModeUnknown);
+			if (SUCCEEDED(hr))
+			{
+				result = true;
+			}
 		}
 	}	
-	catch(_com_error e)
+	catch(_com_error &e)
 	{
-		::MessageBox(NULL, e.ErrorMessage(),L"Error",NULL);
-		return false;
+		// e.ErrorMessage();
+		result = false;
 	}
-	return TRUE;
+	return result;
 }
 
 void CAdoDatabase::Close()
 {
 	if (m_pConn)
 	{
-		m_pConn->Close();
+		if (m_pConn->GetState() != adStateClosed)
+		{
+			m_pConn->Close();
+		}
 	}
 }
 BOOL CAdoDatabase::OpenSql(const std::string &   strSql)

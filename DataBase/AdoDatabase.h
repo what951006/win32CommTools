@@ -1,35 +1,24 @@
-// AdoDatabase.h: interface for the CAdoDatabase class.
-//
-//////////////////////////////////////////////////////////////////////
-
-#if !defined(AFX_ADODATABASE_H__97BB3F74_FD4D_4C57_A7B9_A268F4118D3E__INCLUDED_)
-#define AFX_ADODATABASE_H__97BB3F74_FD4D_4C57_A7B9_A268F4118D3E__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+ï»¿#pragma once
 #include <windows.h>
 #include <string>
-#include <comutil.h>
+#import "C:\Program Files\Common Files\System\ado\msado15.dll" no_namespace rename( "EOF", "EndEOF" )
+
 
 class CAdoDatabase  
 {
 public:
 	CAdoDatabase();
 	virtual ~CAdoDatabase();
-	//´ò¿ªmdbÊı¾İ¿â
+	//æ‰“å¼€mdbæ•°æ®åº“
 	BOOL OpenMDB(const std::string & strPath);
 	BOOL OpenMSSQL(const std::string & strConn);
-	//¹Ø±ÕÊı¾İ¿â
+	//å…³é—­æ•°æ®åº“
 	void Close();
-	//Ö´ĞĞsqlÓï¾ä
+	//æ‰§è¡Œsqlè¯­å¥
 	BOOL OpenSql(const std::string &  strSql);
-	//ÊÂÎñ´¦Àí
+	//äº‹åŠ¡å¤„ç†
 	BOOL BeginTrans();
 	BOOL EndTrans(BOOL bCommit=TRUE);
 public:
 	_ConnectionPtr m_pConn;
-
 };
-
-#endif // !defined(AFX_ADODATABASE_H__97BB3F74_FD4D_4C57_A7B9_A268F4118D3E__INCLUDED_)

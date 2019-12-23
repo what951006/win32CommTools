@@ -1,17 +1,9 @@
-// AdoCommand.h: interface for the CAdoCommand class.
-//
-//////////////////////////////////////////////////////////////////////
-
-#if !defined(AFX_ADOCOMMAND_H__517741FF_24B7_472F_BECA_0D968A1FC7FF__INCLUDED_)
-#define AFX_ADOCOMMAND_H__517741FF_24B7_472F_BECA_0D968A1FC7FF__INCLUDED_
-
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+﻿#pragma once
 #include <windows.h>
 #include <string>
+#import "C:\Program Files\Common Files\System\ado\msado15.dll" no_namespace rename( "EOF", "EndEOF" )
 
-
+class CAdoDatabase;
 class CAdoCommand  
 {
 public:
@@ -23,5 +15,3 @@ public:
 	_CommandPtr m_pCmd;
 
 };
-
-#endif // !defined(AFX_ADOCOMMAND_H__517741FF_24B7_472F_BECA_0D968A1FC7FF__INCLUDED_)

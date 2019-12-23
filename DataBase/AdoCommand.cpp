@@ -1,20 +1,6 @@
-// AdoCommand.cpp: implementation of the CAdoCommand class.
-//
-//////////////////////////////////////////////////////////////////////
+ï»¿#include "AdoCommand.h"
+#include "AdoDatabase.h"
 
-#include "stdafx.h"
-//#include "../DS0304.h" //µ±Ç°¹¤³ÌÍ·ÎÄ¼þ
-#include "AdoCommand.h"
-
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
 CAdoCommand::CAdoCommand()
 {
@@ -27,17 +13,17 @@ CAdoCommand::~CAdoCommand()
 }
 BOOL CAdoCommand::OpenSql(const std::string & strSql, CAdoDatabase* pSet)
 {
-	//´´½¨Command¶ÔÏó
+	//åˆ›å»ºCommandå¯¹è±¡
 	HRESULT nRet=m_pCmd.CreateInstance(__uuidof(Command));
 	if (FAILED(nRet))
 	{
 		return FALSE;
 	}
-	//ÉèÖÃÁ¬½Ó
+	//è®¾ç½®è¿žæŽ¥
 	m_pCmd->ActiveConnection=pSet->m_pConn;
-	//ÉèÖÃsqlÓï¾ä
+	//è®¾ç½®sqlè¯­å¥
 	m_pCmd->CommandText=_bstr_t(strSql.c_str());
-	//Ö´ÐÐsqlÓï¾ä
+	//æ‰§è¡Œsqlè¯­å¥
 	m_pCmd->Execute(NULL,NULL,adCmdText|adExecuteNoRecords);
 	return TRUE;
 }

@@ -1,11 +1,6 @@
-// AdoRecordset.cpp: implementation of the CAdoRecordset class.
-//
-//////////////////////////////////////////////////////////////////////
-
-#include "stdafx.h"
-//#include "../DS0304.h" //µ±Ç°¹¤³ÌÍ·ÎÄ¼ş
-#include "AdoRecordset.h"
+ï»¿#include "AdoRecordset.h"
 #include <comutil.h>
+#include "AdoDatabase.h"
 
 
 CAdoRecordset::CAdoRecordset()
@@ -20,13 +15,13 @@ CAdoRecordset::~CAdoRecordset()
 BOOL CAdoRecordset::OpenTable(const std::string & strTable,
 											CAdoDatabase* pDatabase)
 {
-	//´´½¨Recordset¶ÔÏó
+	//åˆ›å»ºRecordsetå¯¹è±¡
 	HRESULT nRet=m_pRecordset.CreateInstance(__uuidof(Recordset));
 	if (FAILED(nRet))
 	{
 		return FALSE;
 	}
-	//´ò¿ª±í
+	//æ‰“å¼€è¡¨
 	m_pRecordset->Open(_variant_t(strTable.c_str()),
 		(IDispatch*)pDatabase->m_pConn,
 		adOpenKeyset,adLockOptimistic,adCmdTable);
@@ -98,13 +93,13 @@ BOOL CAdoRecordset::GetValue(LONG nIndex, std::string  & strValue)
 {
   if(m_pRecordset)
 	{
-		//»ñÈ¡×Ö¶ÎµÄÖµ
+		//è·å–å­—æ®µçš„å€¼
 		_variant_t varValue=
 			m_pRecordset->Fields->GetItem(nIndex)->Value;
 		
-    if (varValue.vt!=VT_NULL)//ÅĞ¶ÏÊÇ·ñÎª¿Õ
+    if (varValue.vt!=VT_NULL)//åˆ¤æ–­æ˜¯å¦ä¸ºç©º
     {
-			//¸ÃÖµ²»Îª¿Õ£¬½«_variant_t×ª»»³ÉCStringÀàĞÍ
+			//è¯¥å€¼ä¸ä¸ºç©ºï¼Œå°†_variant_tè½¬æ¢æˆCStringç±»å‹
 			strValue=(_bstr_t)varValue;
 			 return TRUE;
     }
@@ -115,13 +110,13 @@ BOOL CAdoRecordset::GetValue(const std::string &  nIndex, std::string &  strValu
 {
 	if(m_pRecordset)
 	{
-		//»ñÈ¡×Ö¶ÎµÄÖµ
+		//è·å–å­—æ®µçš„å€¼
 		_variant_t varValue=
 			m_pRecordset->Fields->GetItem(nIndex.c_str())->Value;
 		
-		if (varValue.vt!=VT_NULL)//ÅĞ¶ÏÊÇ·ñÎª¿Õ
+		if (varValue.vt!=VT_NULL)//åˆ¤æ–­æ˜¯å¦ä¸ºç©º
 		{
-			//¸ÃÖµ²»Îª¿Õ£¬½«_variant_t×ª»»³ÉCStringÀàĞÍ
+			//è¯¥å€¼ä¸ä¸ºç©ºï¼Œå°†_variant_tè½¬æ¢æˆCStringç±»å‹
 			strValue=(_bstr_t)varValue;
 			return TRUE;
 		}
@@ -133,13 +128,13 @@ BOOL CAdoRecordset::GetValue(const std::string &  nIndex,int & intValue)
 {
 	if(m_pRecordset)
 	{
-		//»ñÈ¡×Ö¶ÎµÄÖµ
+		//è·å–å­—æ®µçš„å€¼
 		_variant_t varValue=
 			m_pRecordset->Fields->GetItem(nIndex.c_str())->Value;
 		
-		if (varValue.vt!=VT_NULL)//ÅĞ¶ÏÊÇ·ñÎª¿Õ
+		if (varValue.vt!=VT_NULL)//åˆ¤æ–­æ˜¯å¦ä¸ºç©º
 		{
-			//¸ÃÖµ²»Îª¿Õ£¬½«_variant_t×ª»»³ÉCStringÀàĞÍ
+			//è¯¥å€¼ä¸ä¸ºç©ºï¼Œå°†_variant_tè½¬æ¢æˆCStringç±»å‹
 			intValue=(int)vartol(varValue);
 			return TRUE;
 		}
@@ -159,7 +154,7 @@ void CAdoRecordset::MoveFirst()
 {
 	if (m_pRecordset)
 	{
-		if(!m_pRecordset->BOF)//Êı¾İ¿âÖĞ´æÔÚÊı¾İ
+		if(!m_pRecordset->BOF)//æ•°æ®åº“ä¸­å­˜åœ¨æ•°æ®
 		{
 	     m_pRecordset->MoveFirst();
 		}
@@ -191,7 +186,6 @@ BOOL CAdoRecordset::IsEOF()
 {
 	if (m_pRecordset)
 	{
-		//return m_pRecordset->End3EOF;
 		return m_pRecordset->EndEOF;
 	}
 	return FALSE;
@@ -235,13 +229,13 @@ BOOL CAdoRecordset::DeleteAll()
 }
 BOOL CAdoRecordset::OpenSql(const std::string& strSql,CAdoDatabase* pDatabse)
 {
-	//´´½¨Recordset¶ÔÏó
+	//åˆ›å»ºRecordsetå¯¹è±¡
 	HRESULT nRet=m_pRecordset.CreateInstance(__uuidof(Recordset));
 	if (FAILED(nRet))
 	{
 		return FALSE;
 	}
-	//´ò¿ª±í
+	//æ‰“å¼€è¡¨
 	m_pRecordset->Open(_variant_t(strSql.c_str()),
 		(IDispatch*)pDatabse->m_pConn,
 		adOpenKeyset,adLockOptimistic,adCmdText);
@@ -255,72 +249,72 @@ BOOL CAdoRecordset::OpenSql(const std::string& strSql,CAdoDatabase* pDatabse)
 }
 BOOL CAdoRecordset::SetBinaryValue(LONG nIndex,BYTE* pData,ULONG nLen)
 {
-	//´´½¨SAFEARRAYÊı×é£¬½ÓÊÕĞèÒª±£´æµÄ¶ş½øÖÆÊı¾İ
+	//åˆ›å»ºSAFEARRAYæ•°ç»„ï¼Œæ¥æ”¶éœ€è¦ä¿å­˜çš„äºŒè¿›åˆ¶æ•°æ®
 	SAFEARRAYBOUND bound={0};
 	bound.cElements=nLen;
 	bound.lLbound=0;
 	SAFEARRAY* pArray=SafeArrayCreate(
 		VT_UI1,1,&bound);
-	//½«Êı¾İÊ×ÏÈ±£´æµ½°²È«Êı¾İÖĞ
+	//å°†æ•°æ®é¦–å…ˆä¿å­˜åˆ°å®‰å…¨æ•°æ®ä¸­
 	for (LONG i=0;i<(LONG)nLen;i++)
 	{
 		SafeArrayPutElement(pArray,&i,pData+i);
 	}
-	//¹¹Ôì²ÎÊı£¬½«°²È«Êı×é¹¹ÔìÎªVARIANTÀàĞÍ
+	//æ„é€ å‚æ•°ï¼Œå°†å®‰å…¨æ•°ç»„æ„é€ ä¸ºVARIANTç±»å‹
   VARIANT varChunk={0};
 	varChunk.vt=VT_ARRAY|VT_UI1;
 	varChunk.parray=pArray;
-	//°ÑÊı¾İ±£´æµ½Êı¾İ¿âÖĞ
+	//æŠŠæ•°æ®ä¿å­˜åˆ°æ•°æ®åº“ä¸­
 	m_pRecordset->Fields->GetItem(nIndex)->AppendChunk(&varChunk);
-	//É¾³ıÊı×é
+	//åˆ é™¤æ•°ç»„
 	SafeArrayDestroy(pArray);
 	return TRUE;
 }
 BOOL CAdoRecordset::SetBinaryValue(const char* nIndex,BYTE* pData,ULONG nLen)
 {
-	//´´½¨SAFEARRAYÊı×é£¬½ÓÊÕĞèÒª±£´æµÄ¶ş½øÖÆÊı¾İ
+	//åˆ›å»ºSAFEARRAYæ•°ç»„ï¼Œæ¥æ”¶éœ€è¦ä¿å­˜çš„äºŒè¿›åˆ¶æ•°æ®
 	SAFEARRAYBOUND bound={0};
 	bound.cElements=nLen;
 	bound.lLbound=0;
 	SAFEARRAY* pArray=SafeArrayCreate(
 		VT_UI1,1,&bound);
-	//½«Êı¾İÊ×ÏÈ±£´æµ½°²È«Êı¾İÖĞ
+	//å°†æ•°æ®é¦–å…ˆä¿å­˜åˆ°å®‰å…¨æ•°æ®ä¸­
 	for (LONG i=0;i<(LONG)nLen;i++)
 	{
 		SafeArrayPutElement(pArray,&i,pData+i);
 	}
-	//¹¹Ôì²ÎÊı£¬½«°²È«Êı×é¹¹ÔìÎªVARIANTÀàĞÍ
+	//æ„é€ å‚æ•°ï¼Œå°†å®‰å…¨æ•°ç»„æ„é€ ä¸ºVARIANTç±»å‹
 	VARIANT varChunk={0};
 	varChunk.vt=VT_ARRAY|VT_UI1;
 	varChunk.parray=pArray;
-	//°ÑÊı¾İ±£´æµ½Êı¾İ¿âÖĞ
+	//æŠŠæ•°æ®ä¿å­˜åˆ°æ•°æ®åº“ä¸­
 	m_pRecordset->Fields->GetItem(nIndex)->AppendChunk(&varChunk);
-	//É¾³ıÊı×é
+	//åˆ é™¤æ•°ç»„
 	SafeArrayDestroy(pArray);
 	return TRUE;
 }
 BOOL CAdoRecordset::GetBinaryValue(LONG nIndex, BYTE* pData,ULONG & nLen)
 {
-   //»ñÈ¡×Ö¶ÎµÄÊı¾İ³¤¶È
+   //è·å–å­—æ®µçš„æ•°æ®é•¿åº¦
 	 ULONG nActualSize=
 		 m_pRecordset->Fields->GetItem(nIndex)->ActualSize;
-	 //Èç¹ûpDataÎªNULL£¬±íÊ¾µ÷ÓÃÕßÒª»ñÈ¡Êı¾İµÄ³¤¶È
+	 //å¦‚æœpDataä¸ºNULLï¼Œè¡¨ç¤ºè°ƒç”¨è€…è¦è·å–æ•°æ®çš„é•¿åº¦
 	 if (pData==NULL)
 	 {
       nLen=nActualSize;
 			return TRUE;
 	 }
-	 //µÚ¶ş´Îµ÷ÓÃÊ±£¬pData²»ÎªNULL
-	 //BUFF¿Õ¼ä²»×ã
+	 //ç¬¬äºŒæ¬¡è°ƒç”¨æ—¶ï¼ŒpDataä¸ä¸ºNULL
+	 //BUFFç©ºé—´ä¸è¶³
 	 if (nLen<nActualSize)
 	 {
         nLen=nActualSize;
 				return FALSE;
 	 }
-	 //´ÓÊı¾İ¿âÖĞ»ñÈ¡Êı¾İ±£´æµ½varValue±äÁ¿ÖĞ
+	 //ä»æ•°æ®åº“ä¸­è·å–æ•°æ®ä¿å­˜åˆ°varValueå˜é‡ä¸­
 	 _variant_t varValue=
 		 m_pRecordset->Fields->GetItem(nIndex)->GetChunk(nActualSize);
-   //´ÓvarValue±äÁ¿ÖĞÈ¡³öÊı¾İ±£´æµ½pDataÖ¸ÏòµÄÄÚ´æ¿Õ¼äÖĞ
+   //ä»varValueå˜é‡ä¸­å–å‡ºæ•°æ®ä¿å­˜åˆ°pDataæŒ‡å‘çš„å†…å­˜ç©ºé—´ä¸­
 	 for (LONG i=0;i<(LONG)nLen;i++)
 	 {
 		 SafeArrayGetElement(varValue.parray,&i,pData+i);
@@ -329,26 +323,26 @@ BOOL CAdoRecordset::GetBinaryValue(LONG nIndex, BYTE* pData,ULONG & nLen)
 }
 BOOL CAdoRecordset::GetBinaryValue(const char* nIndex, BYTE* pData,ULONG & nLen)
 {
-	//»ñÈ¡×Ö¶ÎµÄÊı¾İ³¤¶È
+	//è·å–å­—æ®µçš„æ•°æ®é•¿åº¦
 	ULONG nActualSize=
 		m_pRecordset->Fields->GetItem(nIndex)->ActualSize;
-	//Èç¹ûpDataÎªNULL£¬±íÊ¾µ÷ÓÃÕßÒª»ñÈ¡Êı¾İµÄ³¤¶È
+	//å¦‚æœpDataä¸ºNULLï¼Œè¡¨ç¤ºè°ƒç”¨è€…è¦è·å–æ•°æ®çš„é•¿åº¦
 	if (pData==NULL)
 	{
 		nLen=nActualSize;
 		return TRUE;
 	}
-	//µÚ¶ş´Îµ÷ÓÃÊ±£¬pData²»ÎªNULL
-	//BUFF¿Õ¼ä²»×ã
+	//ç¬¬äºŒæ¬¡è°ƒç”¨æ—¶ï¼ŒpDataä¸ä¸ºNULL
+	//BUFFç©ºé—´ä¸è¶³
 	if (nLen<nActualSize)
 	{
         nLen=nActualSize;
 		return FALSE;
 	}
-	//´ÓÊı¾İ¿âÖĞ»ñÈ¡Êı¾İ±£´æµ½varValue±äÁ¿ÖĞ
+	//ä»æ•°æ®åº“ä¸­è·å–æ•°æ®ä¿å­˜åˆ°varValueå˜é‡ä¸­
 	_variant_t varValue=
 		m_pRecordset->Fields->GetItem(nIndex)->GetChunk(nActualSize);
-	//´ÓvarValue±äÁ¿ÖĞÈ¡³öÊı¾İ±£´æµ½pDataÖ¸ÏòµÄÄÚ´æ¿Õ¼äÖĞ
+	//ä»varValueå˜é‡ä¸­å–å‡ºæ•°æ®ä¿å­˜åˆ°pDataæŒ‡å‘çš„å†…å­˜ç©ºé—´ä¸­
 	for (LONG i=0;i<(LONG)nLen;i++)
 	{
 		SafeArrayGetElement(varValue.parray,&i,pData+i);
@@ -373,7 +367,7 @@ long CAdoRecordset::GetRecordCount()
 	{
 		long count = m_pRecordset->GetRecordCount();
 		
-		// Èç¹ûado²»Ö§³Ö´ËÊôĞÔ£¬ÔòÊÖ¹¤¼ÆËã¼ÇÂ¼ÊıÄ¿ --------
+		// å¦‚æœadoä¸æ”¯æŒæ­¤å±æ€§ï¼Œåˆ™æ‰‹å·¥è®¡ç®—è®°å½•æ•°ç›® --------
 		if (count < 0)
 		{
 			long pos = GetAbsolutePosition();
@@ -458,9 +452,9 @@ long CAdoRecordset::vartol(const _variant_t &var)
 	case VT_CY:
 		value = (long)var;
 		break;
-	case VT_BSTR://×Ö·û´®
-	case VT_LPSTR://×Ö·û´®
-	case VT_LPWSTR://×Ö·û´®
+	case VT_BSTR://å­—ç¬¦ä¸²
+	case VT_LPSTR://å­—ç¬¦ä¸²
+	case VT_LPWSTR://å­—ç¬¦ä¸²
 		value = atol((_bstr_t)var);
 		break;
 	case VT_NULL:
