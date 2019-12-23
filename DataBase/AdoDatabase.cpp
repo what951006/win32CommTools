@@ -10,7 +10,7 @@ CAdoDatabase::CAdoDatabase()
 
 CAdoDatabase::~CAdoDatabase()
 {
-    Close();
+
 }
 BOOL CAdoDatabase::OpenMDB(const std::string & strPath)
 {
@@ -53,6 +53,12 @@ BOOL CAdoDatabase::OpenMSSQL(const std::string &  strConn)
 		// e.ErrorMessage();
 		result = false;
 	}
+
+	if (!result)
+	{
+		m_pConn.Release();
+	}
+	
 	return result;
 }
 
@@ -60,10 +66,7 @@ void CAdoDatabase::Close()
 {
 	if (m_pConn)
 	{
-		if (m_pConn->GetState() != adStateClosed)
-		{
-			m_pConn->Close();
-		}
+		m_pConn->Close();
 	}
 }
 BOOL CAdoDatabase::OpenSql(const std::string &   strSql)
