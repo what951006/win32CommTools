@@ -3,7 +3,7 @@
 
 MessageLoop::MessageLoop()
 {
-	thread_id_ = GetCurrentThreadId();
+	
 }
 
 MessageLoop::~MessageLoop()
@@ -13,6 +13,7 @@ MessageLoop::~MessageLoop()
 
 int MessageLoop::Run()
 {
+    thread_id_ = GetCurrentThreadId();
 	while (true)
 	{
 		if (queue_list_.GetLength() > 0)
@@ -30,8 +31,8 @@ int MessageLoop::Run()
 			DispatchMessage(&msg);
 		}
 
-		//TODO，性能如此糟糕，虽然能降低CPU，但不够优雅
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		//TODO，性能如此尴尬，虽然能降低CPU，但不够优雅
+		std::this_thread::sleep_for(std::chrono::nanoseconds(1));
 	}
 	return -1;
 }
