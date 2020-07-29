@@ -16,9 +16,9 @@ int MessageLoop::Run()
     thread_id_ = GetCurrentThreadId();
 	while (true)
 	{
-		if (queue_list_.GetLength() > 0)
+		if (!queue_list_.Empty())
 		{
-			queue_list_.pop_front()();
+			queue_list_.Pop()();
 		}
 
 		MSG msg = { 0 };

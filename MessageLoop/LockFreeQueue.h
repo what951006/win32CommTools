@@ -45,32 +45,32 @@ namespace DataCache
     public:
         LockFreeQueue();
 
-        void push_back(T t);
+        void Push(T t);
 
-        T pop_front(void);
+        T Pop(void);
 
-        bool isEmpty(void);
+        bool Empty();
 
-        int GetLength();
+        int Length();
 
     private:
         LinkList<T> *head_;
         LinkList<T> *tail_;
-        std::_Atomic_integral_t elementNumbers_;
+        std::atomic_int count_;
     }; // class LockFreeQueue
 
     template <typename T>
     LockFreeQueue<T>::LockFreeQueue()
         :head_(NULL),
         tail_(new LinkList<T>),
-        elementNumbers_(0)
+        count_(0)
     {
         head_ = tail_;
         tail_->next = NULL;
     }
 
     template <typename T>
-    void LockFreeQueue<T>::push_back(T t)
+    void LockFreeQueue<T>::Push(T t)
     {
         auto newVal = new LinkList<T>;
         newVal->data = t;
@@ -84,11 +84,11 @@ namespace DataCache
 
         //move tail_
         __sync_bool_compare_and_swap(&tail_, tail_, newVal);
-        elementNumbers_++;
+        count_++;
     }
 
     template <typename T>
-    T LockFreeQueue<T>::pop_front()
+    T LockFreeQueue<T>::Pop()
     {
         LinkList<T> *p;
 
@@ -102,8 +102,8 @@ namespace DataCache
             }
         } while (!__sync_bool_compare_and_swap(&head_->next, p, p->next));
 
-        if (elementNumbers_ > 0) elementNumbers_--;
-        if (elementNumbers_ == 0)
+        if (count_ > 0) count_--;
+        if (count_ == 0)
         {
             // if the queue is empty then the tail to header.
             do
@@ -116,9 +116,9 @@ namespace DataCache
     }
 
     template <typename T>
-    bool LockFreeQueue<T>::isEmpty()
+    bool LockFreeQueue<T>::Empty()
     {
-        if (elementNumbers_ == 0)
+        if (count_ == 0)
         {
             return true;
         }
@@ -129,9 +129,9 @@ namespace DataCache
     }
 
     template <typename T>
-    int LockFreeQueue<T>::GetLength()
+    int LockFreeQueue<T>::Length()
     {
-        return elementNumbers_;
+        return count_;
     }
 
 }// namespace DataCache

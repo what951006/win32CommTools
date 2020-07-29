@@ -21,7 +21,7 @@ public:
 	template<typename Func, typename... ArgsType>
 	void PostTask(Func func, ArgsType...args)
 	{
-		queue_list_.push_back(std::bind(func, args...));
+		queue_list_.Push(std::bind(func, args...));
 	}
 
 	bool CheckRunUIThread();
